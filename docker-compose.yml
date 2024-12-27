@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DATABASE: transportation_management_system_development
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - transportation_system_network
+
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:create db:migrate && bundle exec rails s -b '0.0.0.0' -p 3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/transportation_management_system_development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - transportation_system_network
+volumes:
+  db_data:
+networks:
+  transportation_system_network:
+    driver: bridge
