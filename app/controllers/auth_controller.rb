@@ -1,7 +1,8 @@
 class AuthController < ApplicationController
   before_action :required_for_signup, only: [ :signup ]
   before_action :required_for_signin, only: [ :signin ]
-
+require 'net/http'
+require 'uri'
 
   def signup
     user_data = params.permit(:name, :email, :password, :password_confirmation)
@@ -25,7 +26,13 @@ class AuthController < ApplicationController
     end
   end
 
+  def test
+    uri = URI.parse("https://api-task-bfrm.onrender.com/api/v1/trucks")
 
+    response = Net::HTTP.get_response(uri)
+    headers = response.to_hash
+    render json: { pages: headers["total-pages"] }
+  end
 
   # puts required fields for signup & signin
   private
@@ -35,6 +42,6 @@ class AuthController < ApplicationController
 
   private
   def required_for_signin
-    required([ "email", "password" ])
+    self.required([ "email", "password" ])
   end
 end

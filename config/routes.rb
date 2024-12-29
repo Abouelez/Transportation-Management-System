@@ -10,4 +10,5 @@ Rails.application.routes.draw do
 
   post "signup", to: "auth#signup"
   post "signin", to: "auth#signin"
+  get "test", to: "auth#test"
 end

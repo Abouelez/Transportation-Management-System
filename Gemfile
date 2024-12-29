@@ -48,3 +48,6 @@ end
 
 gem "jwt"
 gem "bcrypt", "~> 3.1.7"
+gem "sidekiq"
+gem "sidekiq-cron"
+gem "redis"
